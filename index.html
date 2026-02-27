@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Beautiful Soul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --primary-pink: #ff4d6d;
+            --soft-purple: #4a148c;
+            --deep-red: #800000;
+            --glass: rgba(255, 255, 255, 0.15);
+        }
+        /* 1. ANIMATED DYNAMIC BACKGROUND */
+        
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #0b090a, #4a148c, #800000, #ff4d6d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        #emoji-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        /* 2. PREMIUM LOADER */
+        
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #0b090a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease;
+        }
+        
+        .heart-loader {
+            font-size: 60px;
+            animation: pulse 1.5s infinite;
+            filter: drop-shadow(0 0 10px var(--primary-pink));
+        }
+        
+        .progress-container {
+            width: 250px;
+            height: 6px;
+            background: #222;
+            border-radius: 10px;
+            margin-top: 25px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-pink), #ff8fa3);
+            transition: width 0.1s linear;
+        }
+        /* 3. CONTENT & GALLERY */
+        
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 1.5s all ease;
+            position: relative;
+            z-index: 10;
+        }
+        
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .photo-container {
+            position: relative;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .photo-container:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+        
+        .gallery img {
+            width: 240px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 4px solid white;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+        }
+        
+        .tap-label {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-pink);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        /* 4. BUTTONS & MODALS */
+        
+        .btn {
+            background: white;
+            border: none;
+            padding: 16px 40px;
+            color: var(--deep-red);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            background: var(--primary-pink);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.4);
+        }
+        
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+            backdrop-filter: blur(8px);
+        }
+        
+        .letter-paper {
+            background: rgba(255, 255, 255, 0.98);
+            color: #333;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 30px;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px var(--primary-pink);
+        }
+        
+        .video-wrapper {
+            width: 95%;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        #popup-player {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        /* 5. ANIMATIONS */
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+        
+        .bg-emoji {
+            position: absolute;
+            bottom: -50px;
+            animation: driftUp linear forwards;
+            opacity: 0.6;
+        }
+        
+        @keyframes driftUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .emoji-pop {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10005;
+            font-size: 2rem;
+            animation: burstOut 1.2s forwards;
+        }
+        
+        @keyframes burstOut {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(1.2) rotate(var(--r));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loader">
+        <div class="heart-loader">💖</div>
+        <p style="color: #ff8fa3; letter-spacing: 3px; font-size: 0.8rem; margin-top: 15px;">UNFOLDING MAGIC...</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="bar"></div>
+        </div>
+    </div>
+
+    <div id="emoji-background"></div>
+    <audio id="bg-music" loop><source src="sasa hivi.mp3.mp3" type="audio/mpeg"></audio>
+
+    <section id="main-content">
+        <h1 style="font-size: clamp(2.5rem, 8vw, 4rem); margin-bottom: 10px; font-family: 'Great Vibes', cursive;">Happy Birthday! 🎂</h1>
+        <p style="font-style: italic; opacity: 0.9; margin-bottom: 30px;">To the woman who makes my world spin...</p>
+
+        <div class="gallery">
+            <div class="photo-container" onclick="handlePhotoClick(event, 'birthday video.mp4.mp4')">
+                <img src="photo1.jpeg.jpeg" alt="Memory 1">
+                <span class="tap-label">Tap for a Surprise ✨</span>
+            </div>
+            <div class="photo-container" onclick="handlePhotoClick(event, 'birthday video.mp4.mp4')">
+                <img src="photo2.jpeg.jpeg" alt="Memory 2">
+                <span class="tap-label">Tap for a Surprise ✨</span>
+            </div>
+            <div class="photo-container" onclick="handlePhotoClick(event, 'photo3.jpg.jpg')">
+                <img src="photo3.jpg.jpg" alt="Memory 3">
+                <span class="tap-label">Our Moment ❤️</span>
+            </div>
+        </div>
+
+        <button class="btn" onclick="openLetter()">Read My Heart 💌</button>
+    </section>
+
+    <div id="letter-modal" class="modal hidden">
+        <div class="letter-paper">
+            <h2 style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: var(--primary-pink); text-align: center; margin-top: 0;">My Dearest,</h2>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            <p>Every emoji on this screen represents a reason why I love you. Happy birthday to the person who makes my life colorful!</p>
+            <p>I sat down to write this a dozen times, but how do I put a love this big into words? Happy Birthday to the most beautiful person I have ever known—inside and out.</p>
+            <p>Today is a celebration of the day the world became a brighter place because you were born. You are my peace when things get loud, my laughter when things get heavy, and my home no matter where we are.</p>
+            <p>You aren't just a year older today; you are a year more beautiful, a year more wise, and a year more precious to me. Your laughter is my favorite song, and your happiness is my only mission.</p>
+            <p>Thank you for being my light when things get dark and my peace when life gets loud. You deserve a day that is as perfect and stunning as your soul.</p>
+            <p>I promise to spend this next year making sure you feel as loved and special as you truly are. You deserve the world.</p>
+            <p style="text-align: center; font-weight: bold; color: var(--primary-pink); font-size: 1.3rem; margin: 25px 0;">Happy Birthday, My Everything! ❤️</p>
+            <div style="text-align: right; font-family: 'Great Vibes', cursive; font-size: 1.8rem;">Forever Yours.</div>
+            <button class="btn" onclick="triggerGrandSurprise()" style="width: 100%; margin-top: 20px; background: var(--primary-pink); color: white;">Final Surprise ❤️</button>
+        </div>
+    </div>
+
+    <div id="video-popup" class="modal hidden">
+        <div class="video-wrapper">
+            <span style="position: absolute; top: -50px; right: 0; font-size: 40px; cursor: pointer;" onclick="closeVideo()">&times;</span>
+            <video id="popup-player" controls playsinline src=""></video>
+        </div>
+    </div>
+
+    <script>
+        const music = document.getElementById('bg-music');
+        const loader = document.getElementById('loader');
+        const bar = document.getElementById('bar');
+        const content = document.getElementById('main-content');
+
+        // 1. Loading Animation
+        let width = 0;
+        const loadInterval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(loadInterval);
+                finishLoading();
+            } else {
+                width += 1;
+                bar.style.width = width + '%';
+            }
+        }, 30);
+
+        function finishLoading() {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                content.classList.add('visible');
+                startEmojiRain();
+                // Interaction listener for audio
+                document.addEventListener('click', () => {
+                    if (music.paused) music.play().catch(e => console.log("Audio needs user tap"));
+                }, {
+                    once: true
+                });
+            }, 1000);
+        }
+
+        // 2. Background Decor
+        function startEmojiRain() {
+            const container = document.getElementById('emoji-background');
+            const emojis = ['❤️', '💖', '✨', '🌸', '💕', '🌹'];
+            setInterval(() => {
+                const div = document.createElement('div');
+                div.className = 'bg-emoji';
+                div.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                const duration = Math.random() * 5 + 7;
+                div.style.animationDuration = duration + 's';
+                container.appendChild(div);
+                setTimeout(() => div.remove(), duration * 1000);
+            }, 600);
+        }
+
+        // 3. Interactions
+        function handlePhotoClick(e, videoSrc) {
+            createBurst(e.clientX, e.clientY);
+            if (videoSrc.endsWith('.mp4') || videoSrc.endsWith('.mp4.mp4')) {
+                music.pause();
+                const player = document.getElementById('popup-player');
+                player.src = videoSrc;
+                document.getElementById('video-popup').classList.remove('hidden');
+                player.play();
+            }
+        }
+
+        function createBurst(x, y) {
+            const emojis = ['❤️', '✨', '💖'];
+            for (let i = 0; i < 12; i++) {
+                const span = document.createElement('span');
+                span.className = 'emoji-pop';
+                span.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 150 + 50;
+                span.style.left = x + 'px';
+                span.style.top = y + 'px';
+                span.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
+                span.style.setProperty('--y', Math.sin(angle) * velocity + 'px');
+                span.style.setProperty('--r', Math.random() * 360 + 'deg');
+                document.body.appendChild(span);
+                setTimeout(() => span.remove(), 1200);
+            }
+        }
+
+        function openLetter() {
+            document.getElementById('letter-modal').classList.remove('hidden');
+        }
+
+        function closeVideo() {
+            const player = document.getElementById('popup-player');
+            player.pause();
+            document.getElementById('video-popup').classList.add('hidden');
+            music.play();
+        }
+
+        function triggerGrandSurprise() {
+            document.getElementById('letter-modal').classList.add('hidden');
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'bg-emoji';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.bottom = '-5vh';
+                    heart.style.fontSize = '30px';
+                    const dur = Math.random() * 2 + 2;
+                    heart.style.animationDuration = dur + 's';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), dur * 1000);
+                }, i * 50);
+            }
+        }
+    </script>
+</body>
+
+</html>
